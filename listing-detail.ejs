@@ -1,0 +1,30 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="page-wrap page-main detail-main">
+  <%- include('partials/flash') %>
+  <div class="breadcrumbs"><a href="/">Ana sayfa</a><span aria-hidden="true">/</span><a href="/kategori/<%= ad.category %>"><%= categoryName(ad.category) %></a><span aria-hidden="true">/</span><span>İlan detayı</span></div>
+  <div class="detail-topline"><div><span class="section-kicker"><%= categoryName(ad.category) %></span><h1><%= ad.title %></h1><p class="detail-location"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><%= ad.city %><span>·</span><%= new Date(ad.created_at).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) %></p></div><div class="detail-topline-actions"><% if (ad.is_demo) { %><span class="demo-badge detail-demo-badge">Örnek ilan</span><% } %><button type="button" class="share-button" data-share-url="<%= canonicalUrl %>"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.6 6.6-4.2M8.7 13.4l6.6 4.2"/></svg><span data-share-label>Paylaş</span></button></div></div>
+
+  <% if (ad.is_demo) { %><div class="demo-notice"><strong>Bu bir örnek ilandır.</strong> Fotoğraf, açıklama ve fiyat gerçek bir satışı temsil etmez.</div><% } %>
+
+  <div class="detail-layout">
+    <section class="detail-content">
+      <div class="detail-gallery">
+        <% if (ad.image_url) { %><img class="detail-image" src="<%= ad.image_url %>" alt="<%= ad.title %>" fetchpriority="high" referrerpolicy="no-referrer"><% } else { %><div class="detail-image-placeholder"><span>V</span><small>Bu ilan için görsel eklenmemiş</small></div><% } %>
+        <div class="gallery-footnote"><span>◉</span><span>Görseller ilan sahibinin paylaştığı içeriklerden oluşur.</span></div>
+      </div>
+      <section class="detail-description"><div class="detail-section-heading"><h2>İlan açıklaması</h2><span class="condition-pill"><%= conditionName(ad.condition) %></span></div><p class="description-text"><%= ad.description %></p><div class="detail-info-grid"><div><span>Kategori</span><strong><%= categoryName(ad.category) %></strong></div><div><span>Konum</span><strong><%= ad.city %></strong></div><div><span>Ürün durumu</span><strong><%= conditionName(ad.condition) %></strong></div><div><span>İlan tarihi</span><strong><%= new Date(ad.created_at).toLocaleDateString('tr-TR') %></strong></div></div></section>
+      <% if (relatedAds.length) { %><section class="related-section"><div class="section-heading"><div><span class="section-kicker">Benzer seçenekler</span><h2>İlgini çekebilir</h2></div><a class="section-link" href="/kategori/<%= ad.category %>">Kategoriye git <span aria-hidden="true">→</span></a></div><div class="listing-grid related-grid"><% relatedAds.forEach((item) => { %><%- include('partials/listing-card', { ad: item }) %><% }) %></div></section><% } %>
+    </section>
+
+    <aside class="detail-sidebar">
+      <div class="price-card"><span class="price-card-label">İlan fiyatı</span><p class="detail-price"><%= formatPrice(ad.price) %></p><div class="price-divider"></div><div class="seller-summary"><span class="seller-avatar"><%= String(ad.owner_name || 'V').charAt(0).toLocaleUpperCase('tr-TR') %></span><span><strong><%= ad.is_demo ? 'Örnek ilan' : (ad.owner_name || 'Vitrinova üyesi') %></strong><small><%= ad.is_demo ? 'Demo içerik' : 'İlan sahibi' %></small></span></div>
+        <% if (currentUser && String(currentUser.id) === String(ad.owner_id)) { %><a class="button button-primary button-full" href="/hesabim">İlanını yönet</a><% } else { %><p class="contact-note">İlk iletişimde kişisel bilgilerini ve ödeme detaylarını paylaşırken dikkatli ol.</p><% } %>
+        <form action="/ilan/<%= ad.id %>/favori" method="post" class="favorite-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="returnTo" value="/ilan/<%= ad.id %>/<%= ad.slug %>"><button type="submit" class="button <%= isFavorite ? 'button-favorite-active' : 'button-secondary' %> button-full"><span aria-hidden="true"><%= isFavorite ? '♥' : '♡' %></span> <%= isFavorite ? 'Favorilerimde' : 'Favorilere ekle' %></button></form>
+      </div>
+      <div class="safety-card"><span class="safety-icon">✓</span><div><strong>Güvenli alışveriş için</strong><p>Ürünü ve satıcıyı doğrulamadan ödeme yapma. Platform dışı linklere dikkat et.</p></div></div>
+      <details class="report-panel"><summary><span aria-hidden="true">⚑</span> Bu ilanı bildir</summary><form action="/ilan/<%= ad.id %>/bildir" method="post" class="report-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Bildirim nedeni<select name="reason" required><option value="fraud">Şüpheli veya dolandırıcılık</option><option value="wrong-category">Yanlış kategori</option><option value="inappropriate">Uygunsuz içerik</option><option value="sold">Ürün artık mevcut değil</option><option value="other">Diğer</option></select></label><label>Ek bilgi (isteğe bağlı)<textarea name="details" maxlength="1000" rows="3" placeholder="Kısaca açıkla"></textarea></label><button class="button button-secondary button-full" type="submit">Bildirimi gönder</button></form></details>
+    </aside>
+  </div>
+</main>
+<%- include('partials/footer') %>

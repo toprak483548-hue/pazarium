@@ -1,0 +1,9 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="page-wrap page-main static-page">
+  <div class="breadcrumbs"><a href="/">Ana sayfa</a><span aria-hidden="true">/</span><span><%= heading %></span></div>
+  <header class="static-page-heading"><span class="section-kicker">Vitrinova hakkında</span><h1><%= heading %></h1><p>Son güncelleme: <%= updatedAt %></p></header>
+  <div class="static-page-content"><% sections.forEach((section) => { %><section><h2><%= section.title %></h2><p><%= section.body %></p></section><% }) %></div>
+  <div class="static-page-contact-note"><span aria-hidden="true">ⓘ</span><p>Bu sayfalar ilk sürüm için hazırlanmış taslak metinlerdir. Vitrinova'yı herkese açmadan önce işletmeci bilgileri ve gerçek uygulama süreçleriyle tamamlanmalıdır.</p></div>
+</main>
+<%- include('partials/footer') %>

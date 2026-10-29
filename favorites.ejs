@@ -1,0 +1,10 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="page-wrap page-main account-page">
+  <%- include('partials/flash') %>
+  <div class="account-welcome"><div><span class="section-kicker">Kaydettiklerin</span><h1>Favorilerin</h1><p>Beğendiğin ilanları burada kolayca bul.</p></div><a class="button button-secondary" href="/ilanlar">İlanları keşfet <span aria-hidden="true">→</span></a></div>
+  <div class="account-tabs"><a class="account-tab" href="/hesabim">İlanlarım</a><a class="account-tab active" href="/favoriler">Favorilerim <span><%= ads.length %></span></a></div>
+  <% if (ads.length) { %><div class="listing-grid listing-grid-results"><% ads.forEach((ad) => { %><div class="favorite-card-wrap"><%- include('partials/listing-card', { ad }) %><form action="/ilan/<%= ad.id %>/favori" method="post" class="favorite-remove-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input type="hidden" name="returnTo" value="/favoriler"><button type="submit" class="text-button text-danger">Favorilerden çıkar</button></form></div><% }) %></div>
+  <% } else { %><div class="empty-state account-empty"><span class="empty-state-icon">♡</span><h2>Favori listen henüz boş</h2><p>İlgini çeken ilanlarda kalp simgesini kullanarak onları burada saklayabilirsin.</p><a class="button button-primary" href="/ilanlar">İlanları keşfet <span aria-hidden="true">→</span></a></div><% } %>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,16 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="page-wrap page-main account-page">
+  <%- include('partials/flash') %>
+  <div class="account-welcome"><div><span class="section-kicker">Kişisel alanın</span><h1>Merhaba, <%= currentUser.name.split(' ')[0] %>.</h1><p>İlanlarını ve favorilerini buradan yönetebilirsin.</p></div><a class="button button-primary" href="/ilan-ekle">+ Yeni ilan</a></div>
+  <div class="account-tabs"><a class="account-tab active" href="/hesabim">İlanlarım <span><%= ads.length %></span></a><a class="account-tab" href="/favoriler">Favorilerim <span>♡</span></a></div>
+  <% if (ads.length) { %>
+    <div class="dashboard-list"><% ads.forEach((ad) => { %>
+      <article class="dashboard-ad"><a href="/ilan/<%= ad.id %>/<%= ad.slug %>" class="dashboard-ad-image"><% if (ad.image_url) { %><img src="<%= ad.image_url %>" alt="<%= ad.title %>" loading="lazy" referrerpolicy="no-referrer"><% } else { %><span>V</span><% } %></a><div class="dashboard-ad-info"><span class="listing-meta"><%= categoryName(ad.category) %> · <%= ad.city %></span><h2><a href="/ilan/<%= ad.id %>/<%= ad.slug %>"><%= ad.title %></a></h2><p class="listing-price"><%= formatPrice(ad.price) %></p><span class="dashboard-ad-date">Yayın tarihi: <%= new Date(ad.created_at).toLocaleDateString('tr-TR') %></span></div><div class="dashboard-ad-actions"><span class="status-pill status-<%= ad.status %>"><%= ad.status === 'active' ? 'Yayında' : ad.status === 'sold' ? 'Satıldı' : ad.status === 'pending' ? 'Onay bekliyor' : 'Gizli' %></span><form action="/hesabim/ilan/<%= ad.id %>/sil" method="post" data-confirm="Bu ilanı kaldırmak istediğine emin misin?"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button type="submit" class="text-button text-danger">İlanı kaldır</button></form></div></article>
+    <% }) %></div>
+  <% } else { %>
+    <div class="empty-state account-empty"><span class="empty-state-icon">＋</span><h2>Henüz ilan paylaşmadın</h2><p>İlk ilanını oluşturarak başlayabilirsin. Kısa ve net bilgilerle daha kolay keşfedilirsin.</p><a class="button button-primary" href="/ilan-ekle">İlk ilanını ver <span aria-hidden="true">→</span></a></div>
+  <% } %>
+  <div class="account-bottom-links"><a href="/favoriler">Favori ilanlarına git <span aria-hidden="true">→</span></a><a href="/gizlilik">Gizlilik bilgileri <span aria-hidden="true">→</span></a></div>
+</main>
+<%- include('partials/footer') %>

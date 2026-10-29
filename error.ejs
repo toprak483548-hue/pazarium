@@ -1,0 +1,8 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="page-wrap error-page">
+  <div class="error-illustration"><span class="error-code"><%= statusCode || 500 %></span><span class="error-star">✦</span></div>
+  <span class="section-kicker">Ufak bir sapma</span><h1><%= heading %></h1><p><%= message %></p>
+  <div class="error-actions"><a class="button button-primary" href="/">Ana sayfaya dön</a><a class="button button-secondary" href="/ilanlar">İlanlarda ara</a></div>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,29 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="page-wrap page-main form-page">
+  <%- include('partials/flash') %>
+  <div class="breadcrumbs"><a href="/">Ana sayfa</a><span aria-hidden="true">/</span><a href="/hesabim">Hesabım</a><span aria-hidden="true">/</span><span>İlan ver</span></div>
+  <div class="form-page-intro"><span class="section-kicker">Yeni bir başlangıç</span><h1>İlanını oluştur</h1><p>Ne sunduğunu açıkça anlat. Doğru bilgiler, doğru kişilerin ilanını bulmasına yardımcı olur.</p></div>
+  <div class="form-page-layout">
+    <form action="/ilan-ekle" method="post" class="listing-form-card">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <% if (errorMessage) { %><div class="form-error" role="alert"><%= errorMessage %></div><% } %>
+      <section class="form-section"><div class="form-section-title"><span>01</span><div><h2>İlan bilgileri</h2><p>Başlık ve açıklama ile başlayalım.</p></div></div>
+        <label class="form-label">İlan başlığı <span class="required-mark">*</span><input type="text" name="title" minlength="8" maxlength="120" value="<%= form.title || '' %>" placeholder="Örn. Az kullanılmış çalışma masası" required><small>Kısa, net ve ürünü anlatan bir başlık seç.</small></label>
+        <label class="form-label">Açıklama <span class="required-mark">*</span><textarea name="description" minlength="20" maxlength="6000" rows="6" placeholder="Ürünün durumu, özellikleri ve varsa önemli ayrıntıları..." required><%= form.description || '' %></textarea><small><span data-char-count="description">0</span> / 6000 karakter</small></label>
+      </section>
+      <section class="form-section"><div class="form-section-title"><span>02</span><div><h2>Kategori ve konum</h2><p>İlanın doğru kişilere ulaşsın.</p></div></div>
+        <div class="form-two-col"><label class="form-label">Kategori <span class="required-mark">*</span><select name="category" required><option value="">Kategori seç</option><% categories.forEach((category) => { %><option value="<%= category.slug %>" <%= form.category === category.slug ? 'selected' : '' %>><%= category.name %></option><% }) %></select></label>
+          <label class="form-label">Şehir <span class="required-mark">*</span><select name="city" required><option value="">Şehir seç</option><% cities.forEach((city) => { %><option value="<%= city %>" <%= form.city === city ? 'selected' : '' %>><%= city %></option><% }) %></select></label></div>
+        <label class="form-label">Ürün durumu <select name="condition"><% conditions.forEach((condition) => { %><option value="<%= condition.value %>" <%= (form.condition || 'used') === condition.value ? 'selected' : '' %>><%= condition.label %></option><% }) %></select></label>
+      </section>
+      <section class="form-section"><div class="form-section-title"><span>03</span><div><h2>Fiyat ve görsel</h2><p>İlanını daha anlaşılır hale getir.</p></div></div>
+        <label class="form-label">Fiyat (TL)<div class="price-input-wrap"><span>₺</span><input type="number" name="price" min="0" max="999999999999" step="1" value="<%= form.price || '' %>" placeholder="Fiyat belirtmek istemiyorsan boş bırak"></div><small>Fiyatı daha sonra hesabından değiştirebilirsin.</small></label>
+        <label class="form-label">Görsel bağlantısı (isteğe bağlı)<input type="url" name="image_url" value="<%= form.image_url || '' %>" placeholder="https://..." inputmode="url"><small>Bu başlangıç sürümü dosya yüklemek yerine herkese açık bir HTTPS görsel bağlantısı kabul eder. Özel veya geçici link kullanma.</small></label>
+      </section>
+      <div class="form-submit-row"><p>İlanı yayınlayarak içerik kurallarına uygun bilgi verdiğini onaylarsın.</p><button class="button button-primary" type="submit">İlanı yayınla <span aria-hidden="true">→</span></button></div>
+    </form>
+    <aside class="listing-form-aside"><div class="form-aside-card"><span class="form-aside-icon">✦</span><h2>İyi bir ilan için</h2><ul><li><span>✓</span> Başlıkta ürünü net anlat.</li><li><span>✓</span> Bilinen kusurları açıklamaya ekle.</li><li><span>✓</span> Mümkünse gerçek ve güncel fotoğraf kullan.</li><li><span>✓</span> Telefon, adres gibi özel bilgileri açıklamaya yazma.</li></ul></div><div class="form-aside-alert"><strong>Önemli</strong><p>Vitrinova bu sürümde ödeme veya kargo hizmeti sunmaz. Alıcılarla iletişimde dikkatli ol.</p></div></aside>
+  </div>
+</main>
+<%- include('partials/footer') %>

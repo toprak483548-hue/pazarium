@@ -1,0 +1,22 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="auth-page page-wrap">
+  <%- include('partials/flash') %>
+  <section class="auth-card">
+    <div class="auth-aside"><span class="auth-aside-mark">✦</span><span class="section-kicker">Vitrinova'ya katıl</span><h1>Güzel keşifler<br>bir hesapla başlar.</h1><p>İlanlarını yönet, beğendiklerini favorilerine ekle ve kaldığın yerden devam et.</p><div class="auth-aside-bottom"><span>✓</span><span>Basit. Anlaşılır. Sana göre.</span></div></div>
+    <div class="auth-form-wrap"><div class="auth-form-heading"><span class="section-kicker">Yeni hesap</span><h2>Hesap oluştur</h2><p>Başlamak için birkaç bilgi yeterli.</p></div>
+      <% if (errorMessage) { %><div class="form-error" role="alert"><%= errorMessage %></div><% } %>
+      <form action="/kayit" method="post" class="stacked-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label class="form-label">Ad soyad<input type="text" name="name" autocomplete="name" minlength="2" maxlength="80" value="<%= form.name || '' %>" placeholder="Örn. Deniz Yılmaz" required></label>
+        <label class="form-label">E-posta adresi<input type="email" name="email" autocomplete="email" maxlength="254" value="<%= form.email || '' %>" placeholder="ornek@mail.com" required></label>
+        <label class="form-label">Şifre<input type="password" name="password" autocomplete="new-password" minlength="10" maxlength="128" placeholder="En az 10 karakter" required><small>Güçlü ve başka yerde kullanmadığın bir şifre seç.</small></label>
+        <label class="form-label">Şifreyi tekrar gir<input type="password" name="confirmPassword" autocomplete="new-password" minlength="10" maxlength="128" placeholder="Şifreni yeniden yaz" required></label>
+        <p class="form-legal-note">Hesap oluşturarak <a href="/kullanim-kosullari">kullanım koşullarını</a> ve <a href="/gizlilik">gizlilik bilgilendirmesini</a> okuyup anladığını belirtirsin. Yayına çıkmadan önce bu metinlerin işletme bilgilerine göre tamamlanması gerekir.</p>
+        <button class="button button-primary button-full" type="submit">Hesabımı oluştur <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="auth-switch">Zaten hesabın var mı? <a href="/giris">Giriş yap</a></p>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,30 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="page-wrap page-main">
+  <%- include('partials/flash') %>
+  <div class="breadcrumbs"><a href="/">Ana sayfa</a><span aria-hidden="true">/</span><% if (activeCategory) { %><a href="/ilanlar">İlanlar</a><span aria-hidden="true">/</span><span><%= activeCategory.name %></span><% } else { %><span>İlanlar</span><% } %></div>
+  <div class="listing-page-heading"><div><span class="section-kicker">Keşfet</span><h1><%= heading %></h1><p><%= intro %></p></div><a class="button button-primary" href="/ilan-ekle">+ İlan ver</a></div>
+  <div class="listing-page-layout">
+    <aside class="filters-panel">
+      <div class="filter-heading"><h2>Filtrele</h2><a href="<%= activeCategory ? '/kategori/' + activeCategory.slug : '/ilanlar' %>">Temizle</a></div>
+      <form action="/ilanlar" method="get" class="filters-form">
+        <label class="filter-label">Kelime ara<input type="search" name="q" value="<%= query.q || '' %>" placeholder="İlanlarda ara"></label>
+        <label class="filter-label">Kategori<select name="category"><option value="">Tüm kategoriler</option><% categories.forEach((category) => { %><option value="<%= category.slug %>" <%= query.category === category.slug ? 'selected' : '' %>><%= category.name %></option><% }) %></select></label>
+        <label class="filter-label">Şehir<select name="city"><option value="">Tüm şehirler</option><% cities.forEach((city) => { %><option value="<%= city %>" <%= query.city === city ? 'selected' : '' %>><%= city %></option><% }) %></select></label>
+        <div class="filter-label"><span>Fiyat aralığı (₺)</span><div class="price-fields"><input type="number" name="minPrice" min="0" step="1" value="<%= query.minPrice || '' %>" placeholder="En az" aria-label="En düşük fiyat"><input type="number" name="maxPrice" min="0" step="1" value="<%= query.maxPrice || '' %>" placeholder="En çok" aria-label="En yüksek fiyat"></div></div>
+        <label class="filter-label">Sıralama<select name="sort"><option value="newest" <%= !query.sort || query.sort === 'newest' ? 'selected' : '' %>>En yeni</option><option value="price_asc" <%= query.sort === 'price_asc' ? 'selected' : '' %>>Fiyat: düşükten yükseğe</option><option value="price_desc" <%= query.sort === 'price_desc' ? 'selected' : '' %>>Fiyat: yüksekten düşüğe</option></select></label>
+        <button class="button button-primary button-full" type="submit">Sonuçları göster <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="filter-tip"><span aria-hidden="true">✦</span><p>Karar vermeden önce ilan açıklamasını ve satıcı bilgilerini dikkatle incele.</p></div>
+    </aside>
+    <section class="listing-results" aria-label="İlan sonuçları">
+      <div class="results-toolbar"><p><strong><%= ads.length %></strong> ilan gösteriliyor<% if (ads.length === 48) { %><span> · İlk 48 sonuç</span><% } %></p><a href="/ilan-ekle">İlanını ekle <span aria-hidden="true">↗</span></a></div>
+      <% if (ads.length) { %>
+        <div class="listing-grid listing-grid-results"><% ads.forEach((ad) => { %><%- include('partials/listing-card', { ad }) %><% }) %></div>
+      <% } else { %>
+        <div class="empty-state empty-results"><span class="empty-state-icon">⌕</span><h2>Bu aramada ilan bulamadık</h2><p>Filtreleri genişletmeyi veya başka bir kelime denemeyi deneyebilirsin.</p><a class="button button-secondary" href="/ilanlar">Tüm ilanları göster</a></div>
+      <% } %>
+    </section>
+  </div>
+</main>
+<%- include('partials/footer') %>

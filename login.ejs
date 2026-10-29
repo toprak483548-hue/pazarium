@@ -1,0 +1,20 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main class="auth-page page-wrap">
+  <%- include('partials/flash') %>
+  <section class="auth-card">
+    <div class="auth-aside auth-aside-login"><span class="auth-aside-mark">↗</span><span class="section-kicker">Tekrar hoş geldin</span><h1>Keşfetmeye<br>kaldığın yerden.</h1><p>Favorilerin ve ilanların tek bir yerde. Vitrinova hesabına giriş yap.</p><div class="auth-aside-bottom"><span>✦</span><span>Her gün yeni bir keşif.</span></div></div>
+    <div class="auth-form-wrap"><div class="auth-form-heading"><span class="section-kicker">Hesabına eriş</span><h2>Giriş yap</h2><p>E-posta ve şifreni girerek devam et.</p></div>
+      <% if (errorMessage) { %><div class="form-error" role="alert"><%= errorMessage %></div><% } %>
+      <form action="/giris" method="post" class="stacked-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label class="form-label">E-posta adresi<input type="email" name="email" autocomplete="email" maxlength="254" value="<%= form.email || '' %>" placeholder="ornek@mail.com" required></label>
+        <label class="form-label">Şifre<input type="password" name="password" autocomplete="current-password" maxlength="128" placeholder="Şifren" required></label>
+        <button class="button button-primary button-full" type="submit">Giriş yap <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="auth-switch">Vitrinova'da yeni misin? <a href="/kayit">Hesap oluştur</a></p>
+      <div class="auth-hint"><span aria-hidden="true">ⓘ</span> Hesap güvenliğin için şifreni kimseyle paylaşma.</div>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

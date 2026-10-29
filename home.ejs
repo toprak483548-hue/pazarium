@@ -1,0 +1,81 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main>
+  <section class="hero-section">
+    <div class="page-wrap hero-layout">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Her gün yeni bir keşif</span>
+        <h1>İyi bir şey<br><em>bulmanın</em> yeni yolu.</h1>
+        <p>Aradığını kolayca bul. Kullanmadığın eşyaya yeni bir hayat ver. İyi fırsatlar, doğru yerde başlar.</p>
+        <div class="hero-actions"><a class="button button-primary" href="/ilanlar">İlanları keşfet <span aria-hidden="true">↗</span></a><a class="hero-text-link" href="/ilan-ekle">Sen de ilan ver <span aria-hidden="true">→</span></a></div>
+        <div class="hero-proof"><span class="proof-icon" aria-hidden="true">✓</span><span>Kolay arama</span><span class="proof-divider"></span><span>Net ilan detayları</span><span class="proof-divider"></span><span>Ücretsiz başlangıç</span></div>
+      </div>
+      <div class="hero-art" aria-label="Kategori ve ilan keşif alanı">
+        <div class="hero-art-backdrop"></div>
+        <div class="hero-note note-top"><span class="note-icon note-green">↗</span><span><strong>Yeni bir keşif</strong><small>Her kategori, yeni bir ihtimal</small></span></div>
+        <div class="hero-art-card card-large">
+          <div class="hero-art-image hero-art-home"><div class="art-window"></div><div class="art-roof"></div><div class="art-plant"></div></div>
+          <div class="art-card-caption"><span><strong>Yaşam alanına iyi gelenler</strong><small>Ev & Yaşam</small></span><span class="art-arrow">↗</span></div>
+        </div>
+        <div class="hero-art-card card-small">
+          <div class="hero-art-image hero-art-tech"><div class="phone-frame"><div class="phone-screen"></div></div><div class="tech-spark">✦</div></div>
+          <div class="art-card-caption"><span><strong>Akıllı seçimler</strong><small>Elektronik</small></span></div>
+        </div>
+        <div class="hero-note note-bottom"><span class="note-icon note-gold">✦</span><span><strong>Sade bir deneyim</strong><small>Aradığın, birkaç adım uzakta</small></span></div>
+        <span class="hero-orbit orbit-one"></span><span class="hero-orbit orbit-two"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="search-panel-wrap page-wrap" aria-label="İlan ara">
+    <form class="home-search-panel" action="/ilanlar" method="get">
+      <div class="search-panel-heading"><span class="search-panel-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg></span><div><strong>Ne arıyorsun?</strong><small>Bir kelimeyle başla, filtrelerle daralt.</small></div></div>
+      <label class="search-field search-main-field"><span>İlan adı veya anahtar kelime</span><input type="search" name="q" placeholder="Örn. şehir bisikleti, çalışma masası..."></label>
+      <label class="search-field"><span>Kategori</span><select name="category"><option value="">Tüm kategoriler</option><% categories.forEach((category) => { %><option value="<%= category.slug %>"><%= category.name %></option><% }) %></select></label>
+      <label class="search-field"><span>Şehir</span><select name="city"><option value="">Tüm şehirler</option><% cities.forEach((city) => { %><option value="<%= city %>"><%= city %></option><% }) %></select></label>
+      <button class="button button-primary search-submit" type="submit">İlan ara <span aria-hidden="true">→</span></button>
+    </form>
+  </section>
+
+  <section class="section-block page-wrap categories-section">
+    <div class="section-heading"><div><span class="section-kicker">İlk adım</span><h2>İhtiyacına göre keşfet</h2><p>Aradığın şeyi doğru kategoride bulmak daha kolay.</p></div><a class="section-link" href="/ilanlar">Tüm kategoriler <span aria-hidden="true">→</span></a></div>
+    <div class="category-grid">
+      <% const categoryEmoji = { vasita: '↗', emlak: '⌂', elektronik: '▣', 'ev-yasam': '⌑', moda: '◇', 'spor-hobi': '↗', 'anne-cocuk': '♡', 'is-hizmet': '▤' }; %>
+      <% categories.forEach((category, index) => { %>
+        <a class="category-tile category-tone-<%= index + 1 %>" href="/kategori/<%= category.slug %>">
+          <span class="category-glyph" aria-hidden="true"><%= categoryEmoji[category.slug] || '◇' %></span>
+          <span class="category-tile-text"><strong><%= category.name %></strong><small><%= counts[category.slug] || 0 %> ilan</small></span><span class="category-chevron" aria-hidden="true">↗</span>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+
+  <section class="section-block featured-section">
+    <div class="page-wrap">
+      <div class="section-heading"><div><span class="section-kicker">Vitrinde</span><h2>Öne çıkan ilanlar</h2><p>İlham veren seçeneklere göz at.</p></div><a class="section-link" href="/ilanlar">Tüm ilanları gör <span aria-hidden="true">→</span></a></div>
+      <% if (ads.length) { %>
+        <div class="listing-grid"><% ads.forEach((ad) => { %><%- include('partials/listing-card', { ad }) %><% }) %></div>
+      <% } else { %>
+        <div class="empty-state"><span class="empty-state-icon">✦</span><h3>İlk keşif seni bekliyor</h3><p>Henüz ilan yok. İlk ilanı paylaşarak başlayabilirsin.</p><a class="button button-primary" href="/ilan-ekle">İlan ver</a></div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="how-section page-wrap">
+    <div class="how-card">
+      <div class="how-copy"><span class="section-kicker">Basit ve anlaşılır</span><h2>Aradığın şeye<br>bir adım daha yakın.</h2><p>Gereksiz karmaşa yok. İlanları keşfet, ayrıntılara bak, sana uyanı bul.</p><a class="button button-light" href="/ilanlar">Keşfetmeye başla <span aria-hidden="true">→</span></a></div>
+      <div class="how-steps">
+        <div class="how-step"><span class="how-step-number">01</span><span class="how-step-icon">⌕</span><div><strong>Aramana başla</strong><p>Kategori, şehir ve kelimeyle seçenekleri daralt.</p></div></div>
+        <div class="how-step"><span class="how-step-number">02</span><span class="how-step-icon">◫</span><div><strong>Detayları incele</strong><p>Fiyatı, açıklamayı ve ilan bilgilerini karşılaştır.</p></div></div>
+        <div class="how-step"><span class="how-step-number">03</span><span class="how-step-icon">♡</span><div><strong>Favorilerine ekle</strong><p>Beğendiğin ilanları hesabında kolayca bul.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seller-cta page-wrap">
+    <div class="seller-cta-mark" aria-hidden="true"><svg viewBox="0 0 72 72" fill="none"><rect x="2" y="2" width="68" height="68" rx="22" stroke="currentColor" stroke-width="1.5"/><path d="M20 25h10l7 22 8-22h10L44 53H33L20 25Z" fill="currentColor"/><circle cx="52" cy="19" r="5" fill="#E8B86D"/></svg></div>
+    <div><span class="section-kicker">Sıra sende</span><h2>Kullanmadığın bir şey,<br>bir başkasının aradığı olabilir.</h2><p>İlanını oluştur, doğru kişilerin keşfetmesine yardımcı ol.</p></div>
+    <a class="button button-primary" href="/ilan-ekle">Ücretsiz ilan ver <span aria-hidden="true">→</span></a>
+  </section>
+</main>
+<%- include('partials/footer') %>
